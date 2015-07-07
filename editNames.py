@@ -187,7 +187,7 @@ def main(argv=None):
     names = readMasterFile(master_file)
     out = modifyFile(file_to_modify,names,key_column,value_column)
 
-    print out
+    print(out)
 
 if __name__ == "__main__":
     main()

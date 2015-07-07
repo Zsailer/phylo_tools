@@ -29,12 +29,12 @@ def reverseBlast(seed_fasta,min_length=50,max_length=300,num_homolog_cutoff=3):
     
     # Find maximum sequence redundancy cutoff that allows us to differentiate 
     # the seed sequence.  
-    print "Optimizing false positive redundancy cutoff."
+    print("Optimizing false positive redundancy cutoff.")
     cutoff = 0.60
     redund = []
     while len(redund) != len(seed_list):
         cutoff += 0.05
-        print "Cutoff: %.2f" % cutoff
+        print("Cutoff: %.2f" % cutoff)
         try:
             redund = runCdhit(seed_list,redund_cutoff=cutoff)
         except BlastToolsError:
@@ -47,7 +47,7 @@ def reverseBlast(seed_fasta,min_length=50,max_length=300,num_homolog_cutoff=3):
 
     cutoff += 0.05
 
-    print "DONE."
+    print("DONE.")
     
     # BLAST the nr with the seed sequences and download sequences
     seed_fasta = [s.formatFasta() for s in seed_list]
@@ -88,7 +88,7 @@ def reverseBlast(seed_fasta,min_length=50,max_length=300,num_homolog_cutoff=3):
     counter = 0
     for h in to_reverse_blast:
 
-        print h.organism, h.unique_name, h.definition
+        print(h.organism, h.unique_name, h.definition)
         localBlast([h.formatFasta()],"oB-tmp_result.xml","reverse_query",
                    force=True,hitlist_size=(num_homolog_cutoff+1))
         reverse_homologs = parseBlastXML("oB-tmp_result.xml")

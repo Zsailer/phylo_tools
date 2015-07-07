@@ -122,7 +122,7 @@ def environmentCheck():
     Make sure that all accessory programs are available in the path.
     """
 
-    print "Checking for required external programs...", 
+    print("Checking for required external programs..."), 
 
     to_check = ["cdhit","blastp","tblastn","makeblastdb"]
 
@@ -135,30 +135,30 @@ def environmentCheck():
         except OSError:
             failed.append(c)
         except:
-            print "Unexpected error when running %s:" % c, sys.exc_info()[0]
+            print("Unexpected error when running %s:" % c, sys.exc_info()[0])
             raise 
 
     if len(failed) > 0:
-        print "FAILURE\n"
+        print("FAILURE\n")
         return failed
     else:
-        print "SUCCESS\n"
+        print("SUCCESS\n")
 
     if Entrez.email == None:
-        print "No email address has been set!  To avoid typing this in the"
-        print "future, edit the line 'Entrez.email = None' to point to your"
-        print "email address (e.g. Entrez.email = \"A.N.Other@example.com\")."
-        print "\nPlease visit the entrez website for more information about"
-        print "Entrez usage rules and why providing an email address is useful."
-        print ""
-        print "http://www.ncbi.nlm.nih.gov/entrez/query/static/eutils_help.html#UserSystemRequirements"
-        print ""
+        print("No email address has been set!  To avoid typing this in the")
+        print("future, edit the line 'Entrez.email = None' to point to your")
+        print("email address (e.g. Entrez.email = \"A.N.Other@example.com\").")
+        print("\nPlease visit the entrez website for more information about")
+        print("Entrez usage rules and why providing an email address is useful.")
+        print("")
+        print("http://www.ncbi.nlm.nih.gov/entrez/query/static/eutils_help.html#UserSystemRequirements")
+        print("")
 
         email = raw_input("Please enter your email address:\n")
 
         Entrez.email = email
 
-        print ""
+        print("")
 
     return [] 
 
@@ -210,7 +210,7 @@ def parseFastaXML(sequence_file):
    
     homolog_list = []
  
-    print "Parsing sequences in %s" % sequence_file, 
+    print("Parsing sequences in %s" % sequence_file)
 
     # Fix screwed up XML because sequences downloaded and output concatenated 
     sequence_input = flattenConcatenatedXML(sequence_file,"TSeqSet")
@@ -230,7 +230,7 @@ def parseFastaXML(sequence_file):
                                       int(properties["TSeq_taxid"]),
                                       properties["TSeq_orgname"].strip())
 
-    print "DONE."
+    print("DONE.")
     
     return homolog_list
 
@@ -291,13 +291,13 @@ def downloadSequences(accession_list,out_file,db="protein",
     # check for existance of out file 
     if os.path.exists(out_file):
         if force:
-            print "Deleting existing download file (%s)!" % out_file
+            print("Deleting existing download file (%s)!" % out_file)
             os.remove(out_file)
         else:
-            print "%s already exists.  Not downloading." % out_file
+            print("%s already exists.  Not downloading." % out_file)
             return 
     
-    print "Posting list of unique accession numbers to NCBI...", 
+    print("Posting list of unique accession numbers to NCBI...") 
 
     # Upload the list of sequences to NCBI
     to_download = ",".join([l.strip() for l in accession_list])
@@ -305,16 +305,16 @@ def downloadSequences(accession_list,out_file,db="protein",
     webenv = post_xml["WebEnv"]
     query_key = post_xml["QueryKey"]
 
-    print "DONE.\n"
+    print("DONE.\n")
 
-    print "Downloading sequences."
+    print("Downloading sequences.")
 
     # Now download the sequences (in fasta/xml format).
     count = len(accession_list)
     out_handle = open(out_file, "w")
     for start in range(0,count,batch_download_size):
         end = min(count, start+batch_download_size)
-        print "Downloading %i to %i of %i" % (start+1,end,count)
+        print("Downloading %i to %i of %i" % (start+1,end,count))
         fetch_handle = Entrez.efetch(db=db, rettype="fasta",
                                      retmode="xml",retstart=start,
                                      retmax=batch_download_size,
@@ -340,7 +340,7 @@ def runCdhit(homolog_list,redund_cutoff=0.99,tmp_file_suffix="oB_cdhit",
 
     # Don't do anything for empty list
     if len(homolog_list) == 0:
-        print "Warning: empty list passed to cdhit!  Ignoring."
+        print("Warning: empty list passed to cdhit!  Ignoring.")
         return homolog_list
 
     fasta_string = "".join([s.formatFasta(i) for i,s in enumerate(homolog_list)])
@@ -357,7 +357,7 @@ def runCdhit(homolog_list,redund_cutoff=0.99,tmp_file_suffix="oB_cdhit",
     run = subprocess.Popen(args,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
     stdoutdata, stderrdata = run.communicate()
     if run.returncode != 0:
-        print stdoutdata
+        print(stdoutdata)
         err = "cdhit failed!\n"
         raise BlastToolsError(err)
 
@@ -405,9 +405,9 @@ def runCdhit(homolog_list,redund_cutoff=0.99,tmp_file_suffix="oB_cdhit",
         os.remove("%s_cdhit.clstr" % tmp_file_suffix)
         os.remove("%s_cdhit.bak.clstr" % tmp_file_suffix)
     
-    print "cdhit lowered redundancy @ %.3f, %i of %i kept" % (redund_cutoff,
+    print("cdhit lowered redundancy @ %.3f, %i of %i kept" % (redund_cutoff,
                                                               len(out),
-                                                              len(homolog_list))
+                                                              len(homolog_list)))
 
     return out
 
@@ -418,7 +418,7 @@ def seq2blastdb(fasta_set,db_name,db_type="prot",quiet=False):
     fasta_set: list of sequence strings in fasta format.
     db_name: database name.  
     db_type: type of database to generate
-    quiet: don't print status-y things
+    quiet: don't print(status-y things
     """
 
     f = open("%s.fasta" % db_name,'w')
@@ -426,7 +426,7 @@ def seq2blastdb(fasta_set,db_name,db_type="prot",quiet=False):
     f.close() 
 
     if not quiet:
-        print "Creating blast database %s..." % db_name,
+        print("Creating blast database %s..." % db_name)
  
     # Create command to run 
     cmd = "makeblastdb -in %s.fasta -dbtype %s -out %s" % (db_name,db_type,db_name)
@@ -438,12 +438,12 @@ def seq2blastdb(fasta_set,db_name,db_type="prot",quiet=False):
    
     # Make sure it exited cleanly 
     if run.poll() != 0:
-        print stdout
+        print(stdout)
         err = "Error running makeblastdb!\n"
         raise BlastToolsError(err)
 
     if not quiet:
-        print "DONE."
+        print("DONE.")
 
 
 def localBlast(query_fasta,out_file,db,e_value_cutoff=10.0,filter=False,
@@ -465,7 +465,7 @@ def localBlast(query_fasta,out_file,db,e_value_cutoff=10.0,filter=False,
     force:  True/False.  Overwrite existing blast file.  If False, the program
             throws a notice that an old file is being used rather than re-
             BLASTING.
-    quiet: Don't print status-y stuff.
+    quiet: Don't print(status-y stuff.
     """
 
     tmp_in_file = "tmp_fasta_for_blast"
@@ -474,11 +474,11 @@ def localBlast(query_fasta,out_file,db,e_value_cutoff=10.0,filter=False,
     if os.path.exists(out_file):
         if force:
             if not quiet:
-                print "Deleting existing blast file (%s)!" % out_file
+                print("Deleting existing blast file (%s)!" % out_file)
             os.remove(out_file)
         else:
             if not quiet:
-                print "%s already exists.  Not performing blast." % out_file
+                print("%s already exists.  Not performing blast." % out_file)
             return 
    
  
@@ -491,12 +491,12 @@ def localBlast(query_fasta,out_file,db,e_value_cutoff=10.0,filter=False,
 
         count = len(query_fasta[counter:counter+max_query_size])
         if not quiet:
-            print "BLASTing %i sequences against the local %s database" % (count,db)
-            print "e_value: %.4e" % e_value_cutoff
-            print "filter low complexity: %r" % filter
-            print "num hits: %i" % hitlist_size
-            print "gap costs: %i %i" % gapcosts
-            print "num threads: %i" % num_threads
+            print("BLASTing %i sequences against the local %s database" % (count,db))
+            print("e_value: %.4e" % e_value_cutoff)
+            print("filter low complexity: %r" % filter)
+            print("num hits: %i" % hitlist_size)
+            print("gap costs: %i %i" % gapcosts)
+            print("num threads: %i" % num_threads)
         
         io_cmd = "blastp -query %s -db %s -outfmt 5 -out %s -num_threads %i" % \
                     (tmp_in_file,db,tmp_out_file,num_threads)
@@ -509,7 +509,7 @@ def localBlast(query_fasta,out_file,db,e_value_cutoff=10.0,filter=False,
                                stderr=subprocess.STDOUT)
         stdoutdata, stderrdata = run.communicate()
         if run.returncode != 0:
-            print stdoutdata
+            print(stdoutdata)
             err = "blastp failed!\n"
             raise BlastToolsError(err)
 
@@ -522,7 +522,7 @@ def localBlast(query_fasta,out_file,db,e_value_cutoff=10.0,filter=False,
         os.remove(tmp_out_file)
 
         if not quiet: 
-            print "DONE.\n"
+            print("DONE.\n")
 
 def ncbiBlast(query_fasta,out_file,db="nr",entrez_query='(none)',
               e_value_cutoff=10.0,filter=False,hitlist_size=1000,gapcosts=(11,1),
@@ -543,7 +543,7 @@ def ncbiBlast(query_fasta,out_file,db="nr",entrez_query='(none)',
     force:  True/False.  Overwrite existing blast file.  If False, the program
             throws a notice that an old file is being used rather than re-
             BLASTING.
-    quiet: don't print status-y things
+    quiet: don't print(status-y things
     """
 
     # Set up proper BLAST input
@@ -556,11 +556,11 @@ def ncbiBlast(query_fasta,out_file,db="nr",entrez_query='(none)',
     if os.path.exists(out_file):
         if force:
             if not quiet:
-                print "Deleting existing blast file (%s)!" % out_file
+                print("Deleting existing blast file (%s)!" % out_file)
             os.remove(out_file)
         else:
             if not quiet:
-                print "%s already exists.  Not performing blast." % out_file
+                print("%s already exists.  Not performing blast." % out_file)
             return 
     
     # Go through a set of query requests no larger than max_query_size
@@ -570,12 +570,12 @@ def ncbiBlast(query_fasta,out_file,db="nr",entrez_query='(none)',
 
         count = len(query_fasta[counter:counter+max_query_size])
         if not quiet:
-            print "BLASTing %i sequences against the NCBI %s database" % (count,db)
-            print "e_value: %.4e" % e_value_cutoff
-            print "filter low complexity: %r" % filter
-            print "num hits: %i" % hitlist_size
-            print "gap costs: %s" % gapcosts
-            print "entrez query: \'%s\'" % entrez_query
+            print("BLASTing %i sequences against the NCBI %s database" % (count,db))
+            print("e_value: %.4e" % e_value_cutoff)
+            print("filter low complexity: %r" % filter)
+            print("num hits: %i" % hitlist_size)
+            print("gap costs: %s" % gapcosts)
+            print("entrez query: \'%s\'" % entrez_query)
 
         # Run BLAST and download input
         result = NCBIWWW.qblast("blastp", "nr", this_query,
@@ -590,7 +590,7 @@ def ncbiBlast(query_fasta,out_file,db="nr",entrez_query='(none)',
         result.close()
  
         if not quiet: 
-            print "DONE.\n"
+            print("DONE.\n")
  
 
 def cleanHomologs(homolog_list,ignore=("pdb","fragment","synthetic"),
@@ -607,7 +607,7 @@ def cleanHomologs(homolog_list,ignore=("pdb","fragment","synthetic"),
     """
 
     if not quiet:
-        print "Cleaning up sequences."
+        print("Cleaning up sequences.")
 
     # Remove pure duplicates (with exactly the same accession number)
     homolog_list = dict([(r.accession,r) for r in homolog_list]).values()
@@ -660,18 +660,18 @@ def cleanHomologs(homolog_list,ignore=("pdb","fragment","synthetic"),
     num_rank_2 = len([h for h in clean_homologs if h.rank == 2])
 
     if not quiet:
-        print "Kept %i of %i hits." % (len(clean_homologs),len(homolog_list))
-        print "gi exclusion: %i, ignored: %i, short %i, long: %i" % \
-            (gi_removal,ignore_removal,short_removal,long_removal)
-        print "Class 0: %i, Class 1: %i, Class 2: %i" % (num_rank_0,num_rank_1,
-                                                         num_rank_2)
-        print ""
+        print("Kept %i of %i hits." % (len(clean_homologs),len(homolog_list)))
+        print("gi exclusion: %i, ignored: %i, short %i, long: %i" % \
+            (gi_removal,ignore_removal,short_removal,long_removal))
+        print("Class 0: %i, Class 1: %i, Class 2: %i" % (num_rank_0,num_rank_1,
+                                                         num_rank_2))
+        print("")
 
     return clean_homologs 
 
 
 # Check the program environment when module is loaded
-print "Loading blastTools version %s" % __version__
+print("Loading blastTools version %s" % __version__)
 failed_programs = environmentCheck()
 if len(failed_programs) != 0:
     err = "Some required programs are not in the path!\n"

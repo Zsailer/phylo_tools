@@ -29,4 +29,4 @@ seq = combined.split(">")
 lengths = [len(s) for s in seq]
 
 for i in range(len(names)):
-    print names[i], lengths[i]
+    print(names[i], lengths[i])

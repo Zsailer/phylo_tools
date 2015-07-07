@@ -133,4 +133,4 @@ if __name__ == "__main__":
     # If invoked from command line, print output to stdout
  
     out = main()
-    print "".join(out)
+    print("".join(out))

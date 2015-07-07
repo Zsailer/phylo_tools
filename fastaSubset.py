@@ -41,9 +41,9 @@ def fastaSubset(fasta_file,patterns,collapse=True,exact=False,inverse=False):
                 if collapse == True:
                     out = [o.strip() for o in out]
                     out[0] = "%s\n" % out[0]
-                    print "".join(out)
+                    print("".join(out))
                 else:
-                    print "".join(out),
+                    print("".join(out))
 
                 sys.stdout.flush()
 
@@ -80,9 +80,9 @@ def fastaSubset(fasta_file,patterns,collapse=True,exact=False,inverse=False):
         if collapse == True:
             out = [o.strip() for o in out]
             out[0] = "%s\n" % out[0]
-            print "".join(out)
+            print("".join(out))
         else:
-            print "".join(out),
+            print("".join(out))
 
     f.close()
 

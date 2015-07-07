@@ -77,4 +77,4 @@ def main(argv=None):
     return fastaScrambler(fasta_file) 
 
 if __name__ == "__main__":
-    print "".join(main())
+    print("".join(main()))

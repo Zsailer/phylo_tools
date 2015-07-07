@@ -96,7 +96,7 @@ def main(argv=None):
 
     ancestor = extractAncestor(node_file,fasta_file,num_alternate_states)
 
-    print ancestor
+    print(ancestor)
 
 
 if __name__ == "__main__":

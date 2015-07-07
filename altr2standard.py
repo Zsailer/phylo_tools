@@ -41,7 +41,7 @@ def main(argv=None):
     try:
         filename = argv[0]
     except IndexError:
-        print __usage__
+        print(__usage__)
         sys.exit()
 
     f = open(filename)

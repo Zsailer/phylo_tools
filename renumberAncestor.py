@@ -63,7 +63,7 @@ def main(argv=None):
 
     out = renumberAncestor(ancestor_file,renumber_file)
 
-    print out
+    print(out)
 
 
 if __name__ == "__main__":

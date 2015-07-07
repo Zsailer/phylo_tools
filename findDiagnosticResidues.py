@@ -237,7 +237,7 @@ def main(argv=None):
         err = "\n\nInvalid entropy cutoff!\n\nUSAGE: %s\n" % __usage__
         raise FindDiagnosticResiduesError(err)
 
-    print findDiagnosticResidues(fasta1,fasta2,entropy_cutoff)
+    print(findDiagnosticResidues(fasta1,fasta2,entropy_cutoff))
 
 
 # If called from the command line, run main

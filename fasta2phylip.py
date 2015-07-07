@@ -68,7 +68,7 @@ def main(argv=None):
     try:
         filename = argv[0]
     except IndexError:
-        print __usage__
+        print(__usage__)
         sys.exit()
 
     f = open(filename)
@@ -78,6 +78,6 @@ def main(argv=None):
     return "".join(fasta2phylip(lines))
 
 if __name__ == "__main__":
-    print main()
+    print (main())
 
 

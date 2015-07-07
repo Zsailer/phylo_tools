@@ -115,5 +115,5 @@ def main(argv=None):
 
 # If called from the command line, run and print to stdout
 if __name__ == "__main__":
-    print ">consensus"
+    print(">consensus")
     print(main())

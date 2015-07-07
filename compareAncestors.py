@@ -59,11 +59,11 @@ def compareAncestors(ancestor1_file,ancestor2_file,ambiguous_cutoff=0.8):
     only_in_anc2 = [p for p in anc2_pos if p not in anc1_pos]
 
     if len(only_in_anc1) > 0:
-        print "# Warning: some sites only in ancestor 1:"
-        print "".join(["# %i\n" % p for p in only_in_anc1]),
+        print("# Warning: some sites only in ancestor 1:")
+        print("".join(["# %i\n" % p for p in only_in_anc1]))
     if len(only_in_anc2) > 0:
-        print "# Warning: some sites only in ancestRr 2:"
-        print "".join(["# %i\n" % p for p in only_in_anc2]),
+        print("# Warning: some sites only in ancestRr 2:")
+        print("".join(["# %i\n" % p for p in only_in_anc2]))
 
     all_pos = [p for p in anc1_pos if p not in only_in_anc1] 
     all_pos.extend([p for p in anc2_pos if p not in only_in_anc2 and p not in all_pos])
@@ -148,7 +148,7 @@ def main(argv=None):
 
     out = compareAncestors(ancestor1_file,ancestor2_file)
 
-    print out
+    print(out)
 
 
 if __name__ == "__main__":
